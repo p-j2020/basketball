@@ -2,7 +2,11 @@
     <div class="nba"> 
         <nba-bar></nba-bar>
         <div class="tabeList"> 
-            <div class="item" v-for="item in tabeList" :key="item.category_id">
+            <div 
+                class="item" 
+                v-for="item in tabeList" 
+                :key="item.category_id" 
+                @click="goto(item.category_id)">
                 <img class="team-logo" :src="api+item.img_url" alt="球队图片">
                 <span class="team-name">
                     {{ item.team_name }}
@@ -18,7 +22,7 @@
                    <img class="img" :src="api+item.new_img_url" alt="新闻图片"> 
                 </div>
                 <div class="new-text">
-                    <p class="title"> {{ item.new_title }} <span> {{ item.new_date }}</span> </p>
+                    <p class="title"> {{ item.new_title }} <span> {{ item.new_date.substr(0,10) }}</span> </p>
                     <p class="text"> {{ item.new_text }} </p>
                 </div>
             </div>
@@ -53,7 +57,17 @@ export default {
                     this.newsList =res.data.data
                 }
             ).catch(console.log)
-        },   
+        },
+        goto(id){
+            this.$store.dispatch('teamId',id);
+            this.$router.push({
+                path:'/nba',
+                query:{
+                    type_id: 1,
+                    category_id: 1
+                }
+                })
+        },
     },
     created () {
         this.getNbaTeamList();

@@ -4,9 +4,9 @@
             <img class="btn-img" src="../assets/imgs/schedule/back.svg" alt="back" @click="add">
             <div class="box" >
                 <div class="team-schedule" 
-                v-for="(item,index) in scheduleList"
+                v-for="(item,index) in scheduleBarList"
                 :key="item.category_id"
-                :style="{transform: `translateX(${-260 * preActive}px)`}">
+                :style="{transform: `translateX(${-262 * preActive}px)`}">
                     <div class="left">
                         <img class="team-logo" :src="api+firstImgList[index]" alt="球队logo图片">
                         <p class="team-name"> {{ item.first_team_name }} </p>
@@ -27,19 +27,20 @@
         </div>
         <team></team>
         <div class="teamTabe">
-            <div class="team-schedule" v-for="item in teamScheduleList" :key="item.category_id">
-                <div class="left">
-                    <img class="team-logo" :src="api+firstTeamlogo" alt="球队logo图片">
+            <p v-show="teamScheduleList.length == 0">暂无数据</p>
+            <div class="team-schedule" v-for="(item,index) in teamScheduleList" :key="item.category_id">
+                <div class="left" >
+                    <img class="team-logo" :src="api+firstTeamImgList[index]" alt="球队logo图片">
                     <p class="team-name"> {{ item.first_team_name }} </p>
                 </div>
-                <div class="center">
+                <div class="center" >
                     <p class="is-start" v-show="item.is_start == 0 "> 未开始 </p>
                     <p class="is-start" v-show="item.is_start == 1 "> 已结束 </p>
                     <p  class="score"> {{ item.score }} </p>
                     <p class="time"> {{ item.start_time }}</p>
                 </div>
-                <div class="right">
-                    <img class="team-logo" :src="api+secondTeamlogo" alt="球队logo图片">
+                <div class="right" >
+                    <img class="team-logo" :src="api+secondTeamImgList[index]" alt="球队logo图片">
                     <p class="team-name"> {{ item.second_team_name}} </p>
                 </div>
             </div>
@@ -60,146 +61,120 @@ export default
             teamId:this.$store.state.teamId,
             typeId:this.$store.state.typeId,
             scheduleList:[],
+            scheduleBarList:[],
             teamScheduleList:[],
-            firstTeamlogo:undefined,
-            secondTeamlogo:undefined,
             firstImgList:[],
             secondImgList:[],
+            firstTeamImgList:[],
+            secondTeamImgList:[],
             preActive:0,
             listlength:0,
+            teamList:[],
         }
     },
     methods: {
+        //按钮点击事件
         add(){
-            if(this.preActive >= this.listlength-4){
-                console.log(this.listlength);
+             if(this.preActive <= 0){
                 return
             }
-            this.preActive += 4 ;
+            this.preActive -= 1;
         },
         decrement(){
-            if(this.preActive <= 0){
-                alert("over")
+            if(this.preActive >= this.listlength-4){
                 return
             }
-            this.preActive -= 4;
+            this.preActive += 1 ;
         },
         getAll(){
             if(this.typeId == 0){
                 axios.get('/api/scheduleRouter/getCbaSchedule').then(
                     res =>{
-                        // console.log(res.data.data);
                         this.scheduleList = res.data.data;
-                        let length = this.scheduleList.length;
-                        this.listlength = this.scheduleList.length;
-                        for(let i = 0 ; i < length; i++){
-                            axios.post('/api/cbaTeamRouter/getCbaTeam',{team_id:this.scheduleList[i].first_team_id}).then(
-                                    res =>{
-                                        this.firstImgList.push(res.data.data[0].img_url)
+                        // console.log(this.scheduleList)
+                        this.scheduleBarList = res.data.data.filter(val =>{
+                            return val.is_start == 1;
+                        })
+                        this.teamScheduleList = this.scheduleList.filter(val =>{
+                            return val.first_team_id == this.teamId;    
+                        });
+                        this.listlength = this.scheduleBarList.length;
+                        axios.get('/api//cbaTeamRouter/getCbaTeamList').then(res =>{
+                                this.teamList = res.data.data;
+                                for(let i = 0; i<this.listlength;i++ ){
+                                    for(let j = 0,length = this.teamList.length; j < length; j++){
+                                        if(this.scheduleBarList[i].first_team_id == this.teamList[j].category_id){
+                                            this.firstImgList.push(this.teamList[j].img_url)
+                                        }
+                                        if(this.scheduleBarList[i].second_team_id == this.teamList[j].category_id){
+                                            this.secondImgList.push(this.teamList[j].img_url)
+                                        }
                                     }
-                                ).catch(console.log)
-                            axios.post('/api/cbaTeamRouter/getCbaTeam',{team_id:this.scheduleList[i].second_team_id}).then(
-                                    res =>{
-                                        this.secondImgList.push(res.data.data[0].img_url)
+                                }
+                                for(let i = 0; i<this.teamScheduleList.length;i++ ){
+                                    for(let j = 0,length = this.teamList.length; j < length; j++){
+                                        if(this.teamScheduleList[i].first_team_id == this.teamList[j].category_id){
+                                            this.firstTeamImgList.push(this.teamList[j].img_url)
+                                        }
+                                        if(this.teamScheduleList[i].second_team_id == this.teamList[j].category_id){
+                                            this.secondTeamImgList.push(this.teamList[j].img_url)
+                                        }
                                     }
-                                ).catch(console.log)
-                            }
-                            console.log(this.firstImgList);
-                            console.log(this.secondImgList);
-                        }
-                    ).catch(console.log)
-                axios.get('/api/cbaTeamRouter/getCbaTeamList').then(
-                    res =>{
-                        // console.log((res.data.data,'cba'));
-                        this.teamList = res.data.data;
+                                }
+                        }).catch(console.log) 
                     }
-                ).catch(console.log)       
+                    ).catch(console.log)
             }else{
-                 axios.get('/api/scheduleRouter/getNbaSchedule').then(
+                axios.get('/api/scheduleRouter/getNbaSchedule').then(
                     res =>{
-                        // console.log(res.data.data);
                         this.scheduleList = res.data.data;
-                        const length = this.scheduleList.length;
-                        this.listlength = this.scheduleList.length
-                        for(let i = 0 ; i < length; i++){
-                            axios.post('/api/nbaTeam/getTeam',{team_id:this.scheduleList[i].first_team_id}).then(
-                                    res =>{
-                                        this.firstImgList.push(res.data.data[0].img_url)
+                        // console.log(this.scheduleList)
+                        this.scheduleBarList = res.data.data.filter(val =>{
+                            return val.is_start == 1;
+                        })
+                        this.teamScheduleList = this.scheduleList.filter(val =>{
+                            return val.first_team_id == this.teamId;    
+                        });
+                        this.listlength = this.scheduleBarList.length;
+                        axios.get('/api/nbaTeam/getList').then(res =>{
+                                this.teamList = res.data.data;
+                                for(let i = 0; i<this.listlength;i++ ){
+                                    for(let j = 0,length = this.teamList.length; j < length; j++){
+                                        if(this.scheduleBarList[i].first_team_id == this.teamList[j].category_id){
+                                            this.firstImgList.push(this.teamList[j].img_url)
+                                        }
+                                        if(this.scheduleBarList[i].second_team_id == this.teamList[j].category_id){
+                                            this.secondImgList.push(this.teamList[j].img_url)
+                                        }
                                     }
-                                ).catch(console.log)
-                            axios.post('/api/nbaTeam/getTeam',{team_id:this.scheduleList[i].second_team_id}).then(
-                                    res =>{
-                                        this.secondImgList.push(res.data.data[0].img_url)
+                                }
+                                for(let i = 0; i<this.teamScheduleList.length;i++ ){
+                                    for(let j = 0,length = this.teamList.length; j < length; j++){
+                                        if(this.teamScheduleList[i].first_team_id == this.teamList[j].category_id){
+                                            this.firstTeamImgList.push(this.teamList[j].img_url)
+                                        }
+                                        if(this.teamScheduleList[i].second_team_id == this.teamList[j].category_id){
+                                            this.secondTeamImgList.push(this.teamList[j].img_url)
+                                        }
                                     }
-                                ).catch(console.log)
-                            }
-                            console.log(this.firstImgList);
-                            console.log(this.secondImgList);
-                        }
-                    ).catch(console.log)
-                axios.get('/api/cbaTeamRouter/getCbaTeamList').then(
-                    res =>{
-                        // console.log((res.data.data,'cba'));
-                        this.teamList = res.data.data;
+                                }
+                        }).catch(console.log) 
                     }
-                ).catch(console.log)      
+                    ).catch(console.log)
             }
         },
-        get(){
-            if(this.typeId == 0){
-                axios.post('/api/scheduleRouter/getCbaTeamSchedule',{team_id:this.teamId}).then(
-                    res =>{
-                        // console.log(res.data.data,'123');
-                        this.teamScheduleList = res.data.data
-                        axios.post('/api/cbaTeamRouter/getCbaTeam',{team_id:this.teamId}).then(
-                            res =>{
-                                this.firstTeamlogo = res.data.data[0].img_url
-                                console.log(res.data.data[0].img_url,'img-url');
-                            }
-                        ).catch(console.log)
-                        axios.post('/api/cbaTeamRouter/getCbaTeam',{team_id:this.teamScheduleList[0].second_team_id}).then(
-                            res =>{
-                                this.secondTeamlogo = res.data.data[0].img_url
-                                console.log(res.data.data[0].img_url,'img-url');
-                            }
-                        ).catch(console.log)
-                    }
-                ).catch(console.log)
-            }else{
-                axios.post('/api/scheduleRouter/getNbaTeamSchedule',{team_id:this.teamId}).then(
-                    res =>{
-                        // console.log(res.data.data,'456s');
-                        this.teamScheduleList = res.data.data
-                         axios.post('/api/nbaTeam/getTeam',{team_id:this.teamId}).then(
-                            res =>{
-                                this.firstTeamlogo = res.data.data[0].img_url
-                                console.log(res.data.data[0].img_url,'img-url');
-                            }
-                        ).catch(console.log)
-                        axios.post('/api/nbaTeam/getTeam',{team_id:this.teamScheduleList[0].second_team_id}).then(
-                            res =>{
-                                this.secondTeamlogo = res.data.data[0].img_url
-                                console.log(res.data.data[0].img_url,'img-url');
-                            }
-                        ).catch(console.log)
-                    }
-                ).catch(console.log)
-            }
-           
-             
-        }
     },
     created () {
-        this.get()
         this.getAll()
     },
     watch:{
         '$store.state.typeId' :function(n,o){
             this.typeId = n;
+            this.getAll()
         },
         '$store.state.teamId' :function(n,o){
             this.teamId =n;
-            this.get()
+            this.getAll()
         }
     }
 }
@@ -243,13 +218,13 @@ export default
 }
 .Schedule-list .team-schedule{
     background-color: white;
-    /* border: 1px solid black; */
+    border: 1px solid black;
     display: flex;
     justify-content: space-between;
     align-items: center;
     border-radius: 5px;
-    font-size: 20px; 
-    margin-left: 20px; 
+    font-size: 16px; 
+    margin: 10px; 
 }
 
 .teamTabe .team-schedule{
@@ -259,7 +234,7 @@ export default
     align-items: center;
     flex-wrap: wrap;
     border-radius: 5px;
-    font-size: 20px;
+    font-size: 16px;
 }
 .team-schedule .left{
     padding: 10px;

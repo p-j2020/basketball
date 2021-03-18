@@ -42,8 +42,7 @@ export default {
             ).catch(console.log)
         },
         teamIdchange(team_id){
-            // this.activeTeam = team_id;
-            // console.log(this.activeTeam,'123456');
+            
             this.activeTeam = team_id;
             console.log(this.activeTeam,"activeTeam");
             this.$store.dispatch('teamId',team_id);

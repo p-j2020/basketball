@@ -79,12 +79,13 @@ export default {
 <style scoped>
 .team{
     width: 100%;
-    background-color: white;
 }
 .team .team-bar{
     display: flex;
     justify-content: flex-start;
     align-items: center;
+    background-color: white;
+
 }
 .team-bar .left{
     display: flex;

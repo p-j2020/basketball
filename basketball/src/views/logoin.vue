@@ -1,20 +1,22 @@
 <template>
     <div class="logoin">
         <div class="logoinTab">
-                <h2 class="title">登录</h2>
-            <div class="inputList">
-                <div class="user">
-                    <img class="user-img" src="../assets/imgs/logoin/user.png" alt="">
-                    <input v-model="userName" class="input user-name" type="text" placeholder="用户名">
+                <div class="btn">
+                    <p class="logoin-btn">登录</p>
+                    <p class="register-btn">注册</p>
                 </div>
-                <div class="password">
-                    <img class="password-img" src="../assets/imgs/logoin/password.png" alt="" >
-                    <input v-model="userPassword" class="input user-password" type="password" placeholder="密码">
-                </div>
-            </div>
-            <div class="btn">
-                <div class="submitBtn" @click="logoin">登录</div>
-                <div class="registerBtn" @click="register">注册</div>
+                <div class="form">
+                <el-form class="user-form" ref="user" label-width="120px">
+                    <el-form-item label="用户名" prop="userName">
+                        <el-input type='string' v-model="user.userName" autocomplete='on'></el-input>
+                    </el-form-item>
+                    <el-form-item label="密码" prop="userPassword">
+                        <el-input type="password" v-model="user.userPassword" autocomplete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item label="确认密码" prop="checkPass">
+                        <el-input type="password" v-model="user.checkPass" autocomplete="off"></el-input>
+                    </el-form-item>
+                </el-form>
             </div>
         </div>
     </div>
@@ -24,12 +26,14 @@
 import axios from 'axios'
 export default {
     name: 'logoin',
-    data () {
-        return {
-            userName:'',
-            userPassword:'',
-            switch:false,
-        }
+    data() {
+      return {
+            user:{
+                userName:undefined,
+                userPassword:undefined,
+                checkPass:undefined
+            }
+      } 
     },
     methods: {
         //登录检查用户名和密码是否存在
@@ -89,6 +93,7 @@ export default {
 </script>
 
 <style scoped>
+
 .logoin{
     width: 100%;
     height: 937px;
@@ -99,100 +104,28 @@ export default {
     justify-content: flex-end;
     align-items: center;
 }
+
 .logoinTab{
-    margin:0px 250px 0 0 ;
+    margin:0px 280px 0 0 ;
     width: 460px;
-    min-height: 300px;
-    background-color: white;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around; 
+    height: 300px;
+    background-color: white; 
     border-radius: 5px;
+    /* display: flex; */
+    /* align-items: center; */
 } 
-.logoinTab .title{
-    font-size: 20px;
-    letter-spacing: 10px;
-    text-align: center;
-    border-bottom: 1px solid #DCDEE2;
-    padding: 3px;
-}
 
-.logoinTab .inputList{
-    /* border-bottom: 1px solid #DCDEE2; */
+.logoinTab .form{
+    width: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
     align-items: center;
-    /* border:  1px solid red; */
-    border-bottom: 1px solid #DCDEE2;
-
+    height: 100%;
+    /* border: 1px solid black;  */
 }
 
-.inputList .user{
-   display: flex;
-   padding-bottom: 30px;
-}
-
-.user .user-img{
-    width: 30px;
-    height: 32px;
-    margin-right: -1px;
-    border-left: 1px solid #DCDEE2;
-    border-top: 1px solid #DCDEE2;
-    border-bottom: 1px solid #DCDEE2;
-    border-radius: 5px 0 0 5px;
-}
-
-.inputList .password{
-    display: flex;
-    padding-bottom: 30px;
-
-}
-
-.password .password-img{
-    width: 30px;
-    height: 32px;
-    margin-right: -1px;
-    border-left: 1px solid #DCDEE2;
-    border-top: 1px solid #DCDEE2;
-    border-bottom: 1px solid #DCDEE2;
-    border-radius: 5px 0 0 5px;
 
 
-}
-.input{
-    width: 300px;
-    height: 30px;
-    outline: none;
-    border: 1px solid #DCDEE2;
-    /* text-align: center; */
-}
-.logoinTab .btn{
-    width: 60%;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    /* background-color: red; */
-    /* border-bottom: 1px solid #DCDEE2; */
-    margin: 0 auto;
-}
-.btn .submitBtn{
-    border: 1px solid #DCDEE2;
-    padding: 5px 10px;
-    border-radius: 5px;
-    letter-spacing: 5px;
-    cursor: pointer;
-    background-color: rgb(133, 169, 236);
-}
-
-.btn .registerBtn{
-    border: 1px solid #DCDEE2;
-    padding: 5px 10px;
-    letter-spacing: 5px;
-    border-radius: 5px;
-    cursor: pointer;
-    background-color: rgb(133, 169, 236);
 
 
-}
 </style>

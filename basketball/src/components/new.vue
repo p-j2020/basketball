@@ -28,9 +28,9 @@
                     </div>
                 <ul class="newsList">
                     <li class="new-item"
-                    v-for="(item) in newList" 
+                    v-for="item in newList" 
                     :key="item.new_id">
-                        <div class="new-box" v-if="item.team_id != teamId ">
+                        <div class="new-box" v-if="item.team_id == teamId+1 || item.team_id == 0  ">
                             <p class="time"> {{ item.new_date }} </p>
                             <p class="new-title"> {{ item.new_title}} </p>
                         </div>
@@ -152,7 +152,7 @@ export default {
 
 .team-new-box .team-new-left{
          /* width: 200px; */
-        height: 300px;
+        height: 305px;
         display: flex;
         align-items: center;
         /* overflow: hidden; */

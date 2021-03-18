@@ -1,8 +1,8 @@
 <template>
     <div class="index">
       <my-head></my-head>
+      <banner class="banner"></banner>
       <div class="container">
-        <banner class="banner"></banner>
         <cba class="cba"></cba>
         <nba class="nba"></nba>
       </div>
@@ -43,6 +43,7 @@ export default {
 
 <style scoped>
 .index{
+  width: 100%;
   background-image: url('../assets/imgs/index/background_img.jpg');
 
 }

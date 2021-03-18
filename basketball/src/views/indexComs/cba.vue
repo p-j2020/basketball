@@ -2,7 +2,11 @@
     <div class="cba">
         <cba-bar></cba-bar>
         <div class='team-list'>
-                <div class="item" v-for="item in teamList" :key="item.category_id">
+                <div 
+                    class="item" 
+                    v-for="item in teamList" 
+                    :key="item.category_id"
+                    @click="goto(item.category_id)" >
                     <img class="team-logo-img" :src="api+item.img_url" alt="">
                     <span class="team-name"> {{ item.team_name }} </span>
                 </div>
@@ -35,7 +39,7 @@
                    <img class="img" :src="api+item.new_img_url" alt="新闻图片"> 
                 </div>
                 <div class="new-text">
-                    <p class="title"> {{ item.new_title }} <span> {{ item.new_date }}</span> </p>
+                    <p class="title"> {{ item.new_title }} <span> {{ item.new_date.substr(0,10) }}</span> </p>
                     <p class="text"> {{ item.new_text }} </p>
                 </div>
             </div>
@@ -61,11 +65,21 @@ export default {
         }
     },
     methods: {
+        goto(id){
+            this.$store.dispatch('teamId',id);
+            this.$router.push({
+                path:'/cba',
+                query:{
+                    type_id: 0,
+                    category_id: 1
+                }
+                })
+        },
         getTeam(){
             axios.get('/api/cbaTeamRouter/getCbaTeamList').then(
                 res =>{
                     this.teamList = res.data.data;
-                    // console.log(this.teamList);
+                    // console.log(this.teamList,'lsit');
                 }
             ).catch(console.log)
         },
