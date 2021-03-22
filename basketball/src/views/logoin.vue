@@ -1,23 +1,36 @@
 <template>
     <div class="logoin">
+        <div class="head">
+            <img class="logo-img" src="../assets/imgs/index/logo.jpg" alt="">
+            <p class="title">欢迎进入篮球的世界</p>
+        </div>
         <div class="logoinTab">
-                <div class="btn">
-                    <p class="logoin-btn">登录</p>
-                    <p class="register-btn">注册</p>
+                <div class="type">
+                    <transition>
+                        <p class="logoin-btn"  :class="{active:logoinActive}" @click=" logoinActive=!logoinActive ">登录</p>
+                    </transition>
+                    <transition>
+                        <p class="register-btn"  :class="{active:!logoinActive}"  @click=" logoinActive=!logoinActive ">注册</p>
+                    </transition>
                 </div>
                 <div class="form">
-                <el-form class="user-form" ref="user" label-width="120px">
-                    <el-form-item label="用户名" prop="userName">
-                        <el-input type='string' v-model="user.userName" autocomplete='on'></el-input>
-                    </el-form-item>
-                    <el-form-item label="密码" prop="userPassword">
-                        <el-input type="password" v-model="user.userPassword" autocomplete="off"></el-input>
-                    </el-form-item>
-                    <el-form-item label="确认密码" prop="checkPass">
-                        <el-input type="password" v-model="user.checkPass" autocomplete="off"></el-input>
-                    </el-form-item>
-                </el-form>
-            </div>
+                    <el-form :model="user" status-icon :rules="rules" ref="user" label-width="100px" class="logoin-form" aria-placeholder="请输入用户名">
+                        <el-form-item label="用户名" prop="userName" >
+                            <el-input type="string" v-model.trim="user.userName" autocomplete="off" clearable autofocus=true></el-input>
+                        </el-form-item>
+                        <el-form-item label="密码" prop="userPasw">
+                            <el-input type="password" v-model.trim="user.userPasw" autocomplete="off"  show-password></el-input>
+                        </el-form-item>
+                        <el-form-item  label="确认密码" prop="checkPasw" autocomplete="off">
+                            <el-input type="password" v-model.trim="user.checkPasw" autocomplete="off"  show-password></el-input>
+                        </el-form-item>
+                        <el-form-item class="btn">
+                            <el-button  v-show="logoinActive" type="primary" @click="login('user')" >登录</el-button>
+                            <el-button  v-show="!logoinActive" type="primary" @click="register('user')">注册</el-button>
+                            <el-button  @click="resetForm('user')">重置</el-button>
+                        </el-form-item>
+                    </el-form>
+                </div>
         </div>
     </div>
 </template>
@@ -27,63 +40,145 @@ import axios from 'axios'
 export default {
     name: 'logoin',
     data() {
+        var validateName = (rule, value, callback) => {
+            if (!value) {
+                return callback(new Error('用户名不能为空'));
+            } 
+            callback()
+        };
+        var validatePass1 = (rule, value, callback) => {
+            if (value == '') {
+                callback(new Error('请输入密码'));
+            } 
+            else {
+            if (this.user.checkPasw !== '') {
+                this.$refs.user.validateField('checkPasw');
+            }
+            callback();
+            }
+        };
+        var validatePass2 = (rule, value, callback) => {
+            if (value === '') {
+                callback(new Error('请再次输入密码'));
+            } 
+            else if (value !== this.user.userPasw) {
+                callback(new Error('两次输入密码不一致!'));
+            } else {
+                callback();
+            }
+        };
       return {
             user:{
-                userName:undefined,
-                userPassword:undefined,
-                checkPass:undefined
+                userName:'',
+                userPasw:'',
+                checkPasw:'',
+            },
+            logoinActive:true,
+            switch:false,
+            rules: {
+                userName: [
+                    { validator: validateName, trigger: 'blur' }
+                ],
+                userPasw: [
+                    { validator: validatePass1, trigger: 'blur' }
+                ],
+                checkPasw: [
+                    { validator: validatePass2, trigger: 'blur' }
+                ]
             }
-      } 
+      }
     },
     methods: {
-        //登录检查用户名和密码是否存在
-        logoin(){
-            let params  ={
-                userName: this.userName,
-                userPassword: this.userPassword,
-            }
-            axios.post('/api/myUserRouter/checkUser',params).then(
-                res =>{
-                    let length = res.data.data.length;   
-                    if(length >=1){
-                        alert(`${this.userName}欢迎进入篮球世界`);
-                        this.goHome();
-                    } else{
-                        alert('用户名或密码输入错误，请重新输入');
+        resetForm(formName) {
+            this.$refs[formName].resetFields();
+        },
+        login(formName) {
+            this.$refs[formName].validate( valid => {
+                if (valid) {
+                    let params  ={
+                        userName: this.user.userName,
+                        userPassword: this.user.userPasw,
                     }
+                    axios.post('/api/myUserRouter/checkUser',params).then(
+                        res =>{
+                            let length = res.data.data.length;   
+                            if(length >=1){
+                                this.$message({
+                                    showClose: true,
+                                    message: '欢迎进入篮球世界！',
+                                    type: 'success'
+                                });
+                                sessionStorage.setItem('userName',params.userName)
+                                this.goHome();
+                            } else{
+                                this.$message({
+                                    showClose: true,
+                                    message: '该用户不存在！',
+                                    type: 'error'
+                                });
+                            }
+                        }
+                    ).catch(console.log)
+                } else {
+                    this.$message({
+                        showClose: true,
+                        message: '用户名和密码不能为空',
+                        type: 'warning'
+                    });
+                    return false;
                 }
-            ).catch(console.log)  
+            });
+        },
+      register(formName){
+          this.$refs[formName].validate( valid => {
+                if (valid) {
+                    let params  ={
+                        userName: this.user.userName,
+                    }
+                    if(!this.switch){
+                        this.switch = true
+                        axios.post('/api/myUserRouter/checkUser',params).then(
+                            res =>{
+                                const length = res.data.data.length;
+                                if(length >= 1){
+                                    this.$message({
+                                        showClose: true,
+                                        message: '用户已经存在，请重新输入！',
+                                        type: 'error'
+                                    });
+                                    this.switch =false;
+                                }else{
+                                    axios.post('/api/myUserRouter/insert',params).then(
+                                        res =>{
+                                            this.$message({
+                                                showClose: true,
+                                                message: '注册成功，请登录吧！',
+                                                type: 'success'
+                                            });
+                                            this.switch =false;
+                                            this.logoinActive = true
+                                        }
+                                    ).catch(console.log)
+                                }
+                            }
+                        ).catch(console.log)
+                    }else{
+                        this.$message({
+                            showClose: true,
+                            message: '处理中，请不要频繁点击！',
+                            type: 'warning'
+                        });
+                    }
+                } else {
+                    console.log('error register!!');
+                    return false;
+                }
+            });
         },
         goHome(){
-            this.$router.push({path: '/home', query: {userName: this.userName}});
-        },
-        // 注册
-        register(){
-            let params  ={
-                userName: this.userName,
-                userPassword: this.userPassword,
-            }
-            if(!this.switch){
-                this.switch = true
-                axios.post('/api/myUserRouter/checkUser',params).then(
-                    res =>{
-                        const length = res.data.data.length;
-                        if(length >= 1){
-                            alert('用户已存在！请重新输入。');
-                            this.switch =false;
-                        }else{
-                            axios.post('/api/myUserRouter/insert',params).then(
-                                res =>{
-                                    alert('注册成功，请登录！')
-                                    this.switch =false;
-                                }
-                            ).catch(console.log)
-                        }
-                    }
-                ).catch(console.log)
-            }else{
-                alert('请勿频繁点击！');
-            }
+            const userName = JSON.stringify(this.user.userName);
+            window.sessionStorage.setItem('userName', userName);
+            this.$router.push({path: '/home', query: {userName: this.user.userName}});
         },
     },
     created () {
@@ -93,7 +188,11 @@ export default {
 </script>
 
 <style scoped>
+.active{
+    /* background: #5d8fc0; */
+    background: linear-gradient(90deg,#a1c4fd 10%,#c2e9fb);
 
+}
 .logoin{
     width: 100%;
     height: 937px;
@@ -103,25 +202,81 @@ export default {
     display: flex;
     justify-content: flex-end;
     align-items: center;
+    position: relative;
+}
+
+.logoin .head{
+    width: 100%;
+    top: 80px;
+    left: 0;
+    position: absolute;
+    /* background: white; */
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+.head .logo-img{
+    width: 60px;
+    height: 60px;
+    margin-left: 20px;
+    border-radius: 20px;
+}
+
+.head .title{
+    font-size: 60px;
+    font-weight: 700;
+    letter-spacing: 5px;
+    color: transparent;
+    background: linear-gradient(90deg,#30cfd0 10%,#330867);
+    /* background: linear-gradient(90deg,#a1c4fd 10%#c2e9fb); */
+    background-clip: text;
+    padding-left: 20px;
 }
 
 .logoinTab{
-    margin:0px 280px 0 0 ;
+    /* width: 500px; */
     width: 460px;
-    height: 300px;
-    background-color: white; 
+    height: 330px;
+    background: white;
+    margin:0 200px 0 0;
     border-radius: 5px;
-    /* display: flex; */
-    /* align-items: center; */
+    overflow: hidden;
 } 
 
-.logoinTab .form{
+.logoinTab .type{
+    font-size: 20px;
+    letter-spacing: 2em;
+    text-align: center;
     width: 100%;
     display: flex;
-    flex-direction: column;
+    justify-content: space-around;
+    border-bottom: 1px solid black;
+    /* padding: 5px; */
+    line-height: 2em;
+}
+.type .logoin-btn{
+    flex: 1;
+    cursor: pointer;
+}
+
+.type .register-btn{
+    flex: 1;
+    cursor: pointer;
+
+
+}
+.logoinTab .logoin-form{
+    margin-top: 30px;
+    margin-right: 30px;
+}
+.btn{
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
     align-items: center;
-    height: 100%;
-    /* border: 1px solid black;  */
+}
+.btn el-button{
+    flex: 1;
 }
 
 

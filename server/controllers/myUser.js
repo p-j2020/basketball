@@ -3,8 +3,8 @@ const {success} = require('../config');
 
 
 async function checkUser({request, response}){
-    let {userName,userPassword} = request.body;
-    let res = await myUserModel.checkUser({userName,userPassword});
+    let {userName} = request.body;
+    let res = await myUserModel.checkUser({userName});
     response.body = success(res);
 }
 

@@ -1,9 +1,9 @@
 <template>
     <div class="banner">
         <template>
-            <el-carousel indicator-position="outside" height='900px'>
-                <el-carousel-item v-for="item in 4" :key="item">
-                <h3>{{ item }}</h3>
+            <el-carousel indicator-position="outside" height='600px'>
+                <el-carousel-item v-for="item in imgs" :key="item.id">
+                <img class="banner-img" :src="item.img_url" alt="轮播图片">
                 </el-carousel-item>
             </el-carousel>
         </template>
@@ -15,7 +15,12 @@ export default {
     name: 'banner',
     data () {
         return {
-
+            imgs:[
+                {id:1,img_url:require('../../assets/imgs/index/banner/img1.png')},
+                {id:2,img_url:require('../../assets/imgs/index/banner/img2.png')},
+                {id:3,img_url:require('../../assets/imgs/index/banner/img3.png')},
+                {id:4,img_url:require('../../assets/imgs/index/banner/img4.png')},
+            ]
         }
     },
     methods: {
@@ -30,10 +35,14 @@ export default {
 <style scoped>
 .banner{
     width: 100%;
-    height: 900px;
-    /* margin-top: 80px; */
+    height: 600px;
     /* border: 1px solid black; */
     background: white;
+    box-sizing: border-box  ;
+}
+.banner .banner-img{
+    width: 100%;
+    height: 800px;
 }
 .el-carousel__item h3 {
     color: #475669;

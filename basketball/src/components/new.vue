@@ -9,7 +9,7 @@
                     <li class="teamNew"
                     v-for="item in newList"
                     :key="item.new_id">
-                        <div class="team-new-box"  v-if="item.team_id == teamId ">
+                        <div class="team-new-box"  v-if="item.team_id == teamId " @click="goTonewDetail(item.new_id,item.team_id)">
                            <div class="team-new-left">
                                <img class="img" :src="api+item.new_img_url" alt="新闻图片">
                            </div>
@@ -24,14 +24,17 @@
             </div>
             <div class="right">
                 <div class="new-item-bar">
-                        <p>新闻</p>
+                        <p>更多新闻</p>
                     </div>
                 <ul class="newsList">
                     <li class="new-item"
                     v-for="item in newList" 
                     :key="item.new_id">
-                        <div class="new-box" v-if="item.team_id == teamId+1 || item.team_id == 0  ">
-                            <p class="time"> {{ item.new_date }} </p>
+                        <div 
+                            class="new-box" 
+                            v-show="item.team_id == teamId+1 || item.team_id == 0  "
+                            @click="goTonewDetail(item.new_id,item.team_id)">
+                            <p class="time"> {{ item.new_date.substr(0,10) }} </p>
                             <p class="new-title"> {{ item.new_title}} </p>
                         </div>
                     </li>
@@ -53,6 +56,17 @@ export default {
         }
     },
     methods: {
+        goTonewDetail(newId,teamId){
+            this.$router.push(
+                {
+                    path:'/newDetail',
+                    query:{
+                        newId:newId,
+                        teamId:teamId,
+                    }
+                }
+            )
+        },
         getNews(){
             axios.get('/api/news/cbaNews').then(
                 res =>{
@@ -173,6 +187,7 @@ export default {
     padding: 20px;
     border-bottom: 5px rgb(104, 102, 102) solid;
     cursor: pointer;
+
 }
 
 .team-new-right .new-title{
@@ -197,6 +212,11 @@ export default {
     line-height: 2em;
     height: 135px;
     overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    
 }
 
 .container .right{
@@ -221,12 +241,26 @@ export default {
 }
 .newsList .new-item{
     /* border: red 1px solid; */
-    padding-top: 20px;
+    /* padding-top: 20px; */
 }
 .new-item .new-box{
     min-height: 0px;
+    padding-top: 20px;
     /* border: solid 1px black; */
 }
+
+.new-item .new-box:hover{
+    cursor: pointer;
+    color: rgb(110, 110, 204);
+    /* border: solid 1px black; */
+}
+.new-item .new-box:hover  .new-title{
+    /* border-bottom: 1px solid rgb(110, 110, 204); */
+    box-sizing: border-box;
+    
+
+}
+
 .new-box .new-title{
     font-size: 20px;
     font-weight: 600;

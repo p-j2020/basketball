@@ -35,6 +35,11 @@ const routes = [
     name:'comment',
     component: () => import('../views/comment')
   },
+  {
+    path:'/newDetail',
+    name:'newDetail',
+    component: () => import('../views/newDetail')
+  },
 ]
 
 const router = new VueRouter({

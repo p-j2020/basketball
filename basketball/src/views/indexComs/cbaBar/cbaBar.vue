@@ -32,11 +32,11 @@ export default {
 <style scoped>
  .cba-bar{
     width: 100%;
-    margin-top: 80px;
     display: flex;
+    margin-top: 80px;
     justify-content: flex-start;
     /* border-bottom: 3px solid rgb(151, 148, 148); */
-    margin-bottom: 50px;
+    margin-bottom: 50px; 
     background-color: rgba(203, 206, 207, 0.938);
     padding: 15px 0;
     opacity: 0.9;

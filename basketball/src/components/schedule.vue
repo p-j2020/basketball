@@ -27,7 +27,7 @@
         </div>
         <team></team>
         <div class="teamTabe">
-            <p v-show="teamScheduleList.length == 0">暂无数据</p>
+            <p v-show="teamScheduleList.length == 0" class="war-text">暂无数据</p>
             <div class="team-schedule" v-for="(item,index) in teamScheduleList" :key="item.category_id">
                 <div class="left" >
                     <img class="team-logo" :src="api+firstTeamImgList[index]" alt="球队logo图片">
@@ -189,12 +189,20 @@ export default
 }
 
 .schedule .teamTabe{
-    width: 90%;
-    padding-top: 50px;
+    width: 850px;
+    /* padding-top: 50px; */
     /* border: 1px solid black; */
     margin:  0 auto;
     display: flex;
-    justify-content: space-around;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+.teamTabe .war-text{
+    width: 100%;
+    font-size: 20px;
+    margin-top: 20px;
 }
 
 .schedule .Schedule-list{
@@ -235,6 +243,7 @@ export default
     flex-wrap: wrap;
     border-radius: 5px;
     font-size: 16px;
+    margin: 20px;
 }
 .team-schedule .left{
     padding: 10px;

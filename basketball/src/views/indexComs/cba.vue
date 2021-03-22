@@ -34,7 +34,10 @@
         </div>
         <video class="video" src="../../assets/video/cba.mp4" controls='controls'></video>
         <div class="news">
-            <div class="new" v-for="item in newsList" :key="item.new_id">
+            <div class="new" 
+                v-for="item in newsList" 
+                :key="item.new_id"
+                @click="goTonewDetail(item.new_id,item.team_id,0)">
                 <div class="new-img">
                    <img class="img" :src="api+item.new_img_url" alt="新闻图片"> 
                 </div>
@@ -65,6 +68,18 @@ export default {
         }
     },
     methods: {
+        goTonewDetail(newId,teamId,typeId){
+            this.$router.push(
+                {
+                    path:'/newDetail',
+                    query:{
+                        newId:newId,
+                        teamId:teamId,
+                        typeId:typeId
+                    }
+                }
+            )
+        },
         goto(id){
             this.$store.dispatch('teamId',id);
             this.$router.push({
@@ -261,12 +276,12 @@ export default {
 }
 .new-text .title:hover{
     cursor: pointer;
-    color: rgb(107, 107, 150);
+    /* color: rgb(107, 107, 150); */
 }
 
 .new-text .text:hover{
     cursor: pointer;
-    color: rgb(107, 107, 150);
+    /* color: rgb(107, 107, 150); */
 }
 .new-text .text{
     line-height: 2em;

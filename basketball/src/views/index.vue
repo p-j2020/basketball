@@ -37,6 +37,7 @@ export default {
     created () {
       // this.getPlayers()
       // this.getNbaTeamList()
+      
     }
 }
 </script>
@@ -59,7 +60,6 @@ export default {
  }
  .container .banner{
    /* border: 1px solid red; */
-   margin-bottom: 50px;
  }
   .container .cba{
    /* border: 1px solid red; */

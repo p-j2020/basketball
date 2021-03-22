@@ -42,10 +42,20 @@ export default {
             ).catch(console.log)
         },
         teamIdchange(team_id){
-            
+            this.toTop()
             this.activeTeam = team_id;
             console.log(this.activeTeam,"activeTeam");
             this.$store.dispatch('teamId',team_id);
+        },
+        toTop() {
+            let top = document.documentElement.scrollTop || document.body.scrollTop;
+            //实现滚动效果
+            const timeTop = setInterval(() => {
+                document.body.scrollTop = document.documentElement.scrollTop = top -= 50;
+                if (top <= 0) {
+                clearInterval(timeTop);
+                }
+            }, 10);
         }
     },
     created () {

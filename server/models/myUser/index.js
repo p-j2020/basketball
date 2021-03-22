@@ -2,9 +2,9 @@ const db = require('../db.js');
 
 //获取或者检查用户和密码
 
-const checkUser = async ({userName,userPassword}) =>{
+const checkUser = async ({userName}) =>{
     // console.log(userName,userPassword);
-    let res = db.q('select user_id from user where user_name = ? and user_password =?',[userName,userPassword]);
+    let res = db.q('select user_id from user where user_name = ?',[userName]);
     // console.log(res);
     return res;
 }

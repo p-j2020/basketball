@@ -1,10 +1,9 @@
 <template>
     <div class="header">
         <div class="left">
-           <img class="logoImg" src="../assets/imgs/index/logo.jpg" alt="logo">
-           <!-- <h1>篮球网站 </h1> -->
-			<!-- {{ userName }} -->
-			<p class="user"> {{  userName}} </p>
+        	<img class="logoImg" src="../assets/imgs/index/logo.jpg" alt="logo">
+          <p class="user" v-show="userName!=''"> 欢迎您，{{ userName }} </p>
+          <p class="logoin" v-show="userName == ''" @click="goToLogoin">登录</p>
         </div>
          <div class="right">
         	<div class="nav">
@@ -39,73 +38,87 @@ export default {
     name: 'myHead',
     data () {
 		return{
+			userName:'',
 			arr: [
-			{ name: "首 页", path: "/home", children: [], },
-			{ 
-				name: "CBA", 
-				path: "/cba?type_id=0&category_id=0", 
-				children: [
-					{id: 0, type_id: 0 ,name: "球员" , path: "/cba?type_id=0&category_id=0", children: [] },
-					{id: 1, type_id: 0 ,name: "球队" , path: "/cba?type_id=0&category_id=1", children: [] },
-					{id: 2, type_id: 0 ,name: "赛程" , path: "/cba?type_id=0&category_id=2", children: [] },
-					{id: 3, type_id: 0 ,name: "新闻" , path: "/cba?type_id=0&category_id=3", children: [] },
-				], 
-			},
-			{
-				name:"NBA",
-				path:"/nba?type_id=1&category_id=0",
-				children:[
-					{ id: 0 ,type_id: 1, name: "球员" , path: "/nba?type_id=1&category_id=0", children: [] },
-					{ id: 1 ,type_id: 1, name: "球队" , path: "/nba?type_id=1&category_id=1", children: [] },
-					{ id: 2 ,type_id: 1, name: "赛程" , path: "/nba?type_id=1&category_id=2", children: [] },
-					{ id: 3 ,type_id: 1, name: "新闻" , path: "/nba?type_id=1&category_id=3", children: [] },
-				]
-			},
-            {
-				name:"评论",
-				path:"/comment",
-				children:[ ]
-			},
-			{
-				name:"更 多",
-				path:"###",
-				children:[
-					{ name: "NBA腾讯体育" , path: "###", children: [] },
-					{ name: "虎扑" , path: "###", children: [] },
-					{ name: "中国CBA" , path: "###", children: [] },
-				]
-			},
-			{
-				name:"规 则",
-				path:"/rule",
-				children:[]
-			},
-		],
-		userName:undefined,
+				{ name: "首 页", path: "/home", children: [], },
+				{ 
+					name: "CBA", 
+					path: "/cba?type_id=0&category_id=1", 
+					children: [
+						{id: 0, type_id: 0 ,name: "球员" , path: "/cba?type_id=0&category_id=0", children: [] },
+						{id: 1, type_id: 0 ,name: "球队" , path: "/cba?type_id=0&category_id=1", children: [] },
+						{id: 2, type_id: 0 ,name: "赛程" , path: "/cba?type_id=0&category_id=2", children: [] },
+						{id: 3, type_id: 0 ,name: "新闻" , path: "/cba?type_id=0&category_id=3", children: [] },
+					], 
+				},
+				{
+					name:"NBA",
+					path:"/nba?type_id=1&category_id=1",
+					children:[
+						{ id: 0 ,type_id: 1, name: "球员" , path: "/nba?type_id=1&category_id=0", children: [] },
+						{ id: 1 ,type_id: 1, name: "球队" , path: "/nba?type_id=1&category_id=1", children: [] },
+						{ id: 2 ,type_id: 1, name: "赛程" , path: "/nba?type_id=1&category_id=2", children: [] },
+						{ id: 3 ,type_id: 1, name: "新闻" , path: "/nba?type_id=1&category_id=3", children: [] },
+					]
+				},
+				{
+					name:"评论",
+					path:"/comment",
+					children:[ ]
+				},
+				{
+					name:"更 多",
+					path:"###",
+					children:[
+						{ name: "NBA腾讯体育" , path: "###", children: [] },
+						{ name: "虎扑" , path: "###", children: [] },
+						{ name: "中国CBA" , path: "###", children: [] },
+					]
+				},
+				{
+					name:"规 则",
+					path:"/rule",
+					children:[]
+				},
+			],
 		}
     },
     methods: {
-      goTo(id){
-        if(this.$route.query.categoryId == id){
-          return;
-        }
-        this.$router.push({
-          path: '/product',
-          // name: 'product',
-          query:{
-            categoryId: id
-          }
-        })
-      },
+		goToLogoin(){
+			this.$router.push({
+			path: '/',
+			query:{}})
+		},
+    	goTo(id){
+			if(this.$route.query.categoryId == id){
+			return;
+			}
+			this.$router.push({
+			path: '/product',
+			// name: 'product',
+			query:{
+				categoryId: id
+			}
+			})
+		},
 
-      change(id,type_id){
-        this.$store.dispatch("optionId",id);
-        this.$store.dispatch("typeId",type_id);
-      }
-    },
-    created () {
-		this.userName = this.$route.query.userName;
-    }
+    	change(id,type_id){
+			this.$store.dispatch("optionId",id);
+			this.$store.dispatch("typeId",type_id);
+		}
+		},
+		created () {
+			// this.userName = this.$route.query.userName;
+      		// this.user_name = sessionStorage.getItem('userName');
+			  if(!JSON.parse(window.sessionStorage.getItem('userName'))){
+					return
+			  }else{
+					const userName = JSON.parse(window.sessionStorage.getItem('userName'));
+			  		this.userName = userName;
+					  console.log(this.userName);
+			  }
+			  
+		},
 }
 </script>
 
@@ -150,12 +163,19 @@ export default {
 }
 .left .user{
 	font-size: 22px;
-	font-weight: 600;
 	margin-left: 50px;
 	padding: 0 10px 0px 10px ;
-	border-bottom: 2px solid rgb(136, 133, 133);
 	text-align: center;
 }
+.left .logoin{
+	font-size: 18px;
+	margin-left: 50px;
+	padding: 0 10px 0px 10px ;
+	text-align: center;
+	color: rgb(80, 189, 233);
+	cursor: pointer;
+}
+
  .header .right {
   display: flex;
   justify-content: space-around;
@@ -174,6 +194,8 @@ export default {
   padding: 0 20px;
   line-height: 80px;
   position: relative;
+  box-sizing: border-box;
+
 }
 
 .nav .nav-list .option1 a {
@@ -186,7 +208,7 @@ export default {
 }
 
 .nav .nav-list .option1:hover {
-  border-bottom: 2px solid #0253A4;
+  border-bottom: 2px solid #0253A4; 
 }
 
 .nav .nav-list .option1:hover .sub-nav-list {

@@ -8,7 +8,6 @@ const store = new Vuex.Store({
     teamId:1,
     typeId:0,
     optionId:undefined,
-    userName:'123456',
   },
   mutations: {
     //head 点击的是NBA还是CBA 1 || 0
@@ -26,9 +25,6 @@ const store = new Vuex.Store({
       state.teamId = pylod;
       console.log(state.teamId,"teamId");
     },
-    userNamechange(state,pylod){
-      state.userName = pylod;
-    }
   },
   actions: {
     typeId(context,tean_id){
@@ -40,9 +36,6 @@ const store = new Vuex.Store({
     teamId(context,team_id){
       context.commit('teamIdChange',team_id);
     },
-    userName(context,user_name){
-      context.commit('userNamechange',user_name);
-    }
   },
   modules: {
   }
