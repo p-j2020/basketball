@@ -13,8 +13,15 @@ async function insert({request, response}){
     let res = await myUserModel.insert({userName,userPassword});
     response.body = success(res);
 }
+async function getUserId({request, response}){
+    let {userName} = request.body;
+    let res = await myUserModel.getUserId({userName});
+    // console.log(res);
+    response.body = success(res);
+}
 
 module.exports = {
     checkUser,
     insert,
+    getUserId,
 }

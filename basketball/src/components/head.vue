@@ -115,7 +115,7 @@ export default {
 			  }else{
 					const userName = JSON.parse(window.sessionStorage.getItem('userName'));
 			  		this.userName = userName;
-					  console.log(this.userName);
+					  // console.log(this.userName);
 			  }
 			  
 		},

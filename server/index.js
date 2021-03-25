@@ -11,6 +11,7 @@ const newsRouter = require('./router/news')
 const nbaPlayersRouter = require('./router/nbaPlayers')
 const ScheduleRouter = require('./router/Schedule')
 const commentRouter = require('./router/comment')
+const postCommentRouter = require('./router/post_comment')
 
 
 const bodyParser = require('koa-bodyparser');
@@ -58,6 +59,8 @@ app.use(newsRouter.routes())
 app.use(nbaPlayersRouter.routes())
 app.use(ScheduleRouter.routes())
 app.use(commentRouter.routes())
+app.use(postCommentRouter.routes())
+
 
 
 // app.use(express.static('public'));

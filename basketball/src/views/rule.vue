@@ -68,14 +68,16 @@ export default {
     color: rgb(102, 99, 99);
  }
  .rule .tabList{
-    widows: 1200px;
+    width: 1000px;
+    margin: 0 auto;
     padding: 60px 60px 0 60px;
     
  }
  .tabList .name{
     /* border: 1px solid red; */
     font-size: 18px;
-    border-top: 2px solid rgb(144, 154, 209);
+    font-weight: 600;
+    /* border-top: 2px solid rgb(144, 154, 209); */
     box-sizing: border-box;
  }
  .tabList .text{

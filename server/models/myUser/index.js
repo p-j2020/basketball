@@ -9,8 +9,6 @@ const checkUser = async ({userName}) =>{
     return res;
 }
 
-
-
 const insert = async ({userName,userPassword}) =>{
     // console.log(userName,userPassword);
     let res = db.q('INSERT INTO user(user_name,user_password) VALUES (?,?)',[userName,userPassword]);
@@ -18,7 +16,15 @@ const insert = async ({userName,userPassword}) =>{
     return res;
 }
 
+const getUserId = async ({userName}) =>{
+    let res = db.q('select user_id from user where user_name = ?',[userName]);
+    // console.log(res)
+    return res;
+}
+
+
 module.exports = {
     checkUser,
     insert,
+    getUserId,
 }

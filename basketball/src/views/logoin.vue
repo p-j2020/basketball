@@ -2,7 +2,7 @@
     <div class="logoin">
         <div class="head">
             <img class="logo-img" src="../assets/imgs/index/logo.jpg" alt="">
-            <p class="title">欢迎进入篮球的世界</p>
+            <p class="title">欢迎进入篮球世界</p>
         </div>
         <div class="logoinTab">
                 <div class="type">
@@ -43,16 +43,24 @@ export default {
         var validateName = (rule, value, callback) => {
             if (!value) {
                 return callback(new Error('用户名不能为空'));
-            } 
+            }
+            if(value.length >10){
+                return callback(new Error('用户名长度不能超过10位'))
+            }
             callback()
         };
         var validatePass1 = (rule, value, callback) => {
             if (value == '') {
-                callback(new Error('请输入密码'));
-            } 
+                return callback(new Error('请输入密码'));
+            }
             else {
             if (this.user.checkPasw !== '') {
-                this.$refs.user.validateField('checkPasw');
+                var reg = /^[a-zA-Z0-9_]{6,10}$/g; 
+                if(reg.test(value)){
+                    this.$refs.user.validateField('checkPasw');
+                }else{
+                    return callback(new Error('用户名只能由字母数字下划线组成,长度大于7小于11'))
+                }
             }
             callback();
             }
@@ -119,14 +127,15 @@ export default {
                             }
                         }
                     ).catch(console.log)
-                } else {
-                    this.$message({
-                        showClose: true,
-                        message: '用户名和密码不能为空',
-                        type: 'warning'
-                    });
-                    return false;
-                }
+                } 
+                // else {
+                //     this.$message({
+                //         showClose: true,
+                //         message: '用户名或密码输入不正确，请重新输入',
+                //         type: 'warning'
+                //     });
+                //     return false;
+                // }
             });
         },
       register(formName){
@@ -134,10 +143,11 @@ export default {
                 if (valid) {
                     let params  ={
                         userName: this.user.userName,
+                        userPassword: this.user.userPasw,
                     }
                     if(!this.switch){
                         this.switch = true
-                        axios.post('/api/myUserRouter/checkUser',params).then(
+                        axios.post('/api/myUserRouter/checkUser',{userName:params.userName}).then(
                             res =>{
                                 const length = res.data.data.length;
                                 if(length >= 1){

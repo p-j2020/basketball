@@ -22,7 +22,7 @@
             </div>
             <div class="right">
                 <div class="teamNewList">
-                    <p class="bar" v-show="team_id != 0">球队其他新闻</p>
+                    <p class="bar" v-show="team_id != 0">球队新闻</p>
                     <p class="bar" v-show="team_id == 0">热门新闻</p>
                     <div class="otherNews">
                         <div class="new-item"  
