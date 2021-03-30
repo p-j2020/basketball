@@ -4,7 +4,7 @@ const getComment = async ( ) =>{
     return await db.q('SELECT * from comment ;')
 }
 const addComment = async ({user_id,comment_title,comment_text,time} ) =>{
-    return await db.q('INSERT INTO comment(user_id,comment_title,comment_text,date_time) VALUES(?,?,?,?)',[user_id,comment_title,comment_text,time])
+    return await db.q('INSERT INTO comment(user_id,comment_title,comment_text,time) VALUES(?,?,?,?)',[user_id,comment_title,comment_text,time])
 }
 
 const getUserComment = async ({user_id} ) =>{

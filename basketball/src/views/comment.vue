@@ -226,10 +226,17 @@ export default {
                                             table_name:id,
                                             user_name:this.userName,
                                             comment_id:id,
-                                            comment_text:this.textarea
+                                            comment_text:this.textarea,
+                                            date_time:dateTime
                                         }).then(
                                         res => {
                                             // console.log(res.data.data,'insertComment');
+                                            this.textarea= '';
+                                            this.$message({
+                                                showClose: true,
+                                                message: '发表成功！',
+                                                type: 'success'
+                                            });
                                             this.getPushComent(id);
                                         }
                                     ).catch(console.log)
@@ -430,7 +437,7 @@ export default {
                 res =>{
                     // console.log(this.userId,'comment');
                     // console.log(res.data.data,'comment');
-                    this.commentList = res.data.data
+                    this.commentList = res.data.data.reverse()
                     this.commentList.forEach( item =>{
                         // console.log(item.time);
                         item.time = this.formateDate(item.time)
@@ -460,6 +467,9 @@ export default {
 </script>
 
 <style >
+.comment{
+    background-image: linear-gradient(to bottom , #f5f7fa, #c3cfe2);
+}
 .el-drawer__body{
     overflow: auto; 
 }
@@ -541,11 +551,13 @@ export default {
 
 .container .comment-list{
     flex: 2;
+    /* margin-top: 20px; */
 }
 
 .comment-list .comment-item{
     padding: 10px;
     /* background-color: blueviolet; */
+    background: white;
 }
 .comment-item .comment-title{
     font-size: 20px;

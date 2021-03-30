@@ -7,6 +7,7 @@
         <nba class="nba"></nba>
       </div>
       <my-foot></my-foot>
+      <el-backtop></el-backtop>
     </div>
 </template>
 

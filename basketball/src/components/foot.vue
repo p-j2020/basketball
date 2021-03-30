@@ -10,7 +10,17 @@
                             <li v-for=" item in dataes" :key="item.key">
                                 <dl>
                                     <dt>{{ item.key }}</dt>
-                                    <dd v-for="value in item.value" :key="value"><a href="###">{{ value }}</a></dd>
+                                    <dd v-for="value in item.value" :key="value.name" @click="change(value.id,value.type_id)">
+                                      <!-- <a href="###">{{ value }}</a> -->
+						                          <!-- <router-link :to="{path: value.path}"> {{ value.name }} </router-link> -->
+                                      <router-link v-show="value.id != 'more'"
+                                        :to="{path: value.path} ">
+                                        {{value.name}} 
+                                      </router-link> 
+                                      <a v-show="value.id == 'more'" :href="value.path">
+                                        {{ value.name }} 
+                                      </a>
+                                    </dd>
                                 </dl>
                             </li>
                             <!-- <li> 
@@ -50,13 +60,38 @@ export default {
     data () {
         return {
             dataes:[
-                {key:"CBA" , value:["球员","球队","赛程","新闻"]},
-                {key:"NBA" , value:["球员","球队","赛程","新闻"]},
-                {key:"更多" , value:["NBA腾讯体育","虎扑","新闻资讯","中国CBA"]},
+                {
+                  key:"CBA" , 
+                  value:[
+                    {id: 0, type_id: 0,name:"球员",path:"/cba?type_id=0&category_id=0"},
+                    {id: 1, type_id: 0,name:"球队",path:"/cba?type_id=0&category_id=1"},
+                    {id: 2, type_id: 0,name:"赛程",path:"/cba?type_id=0&category_id=2"},
+                    {id: 3, type_id: 0,name:"新闻",path:"/cba?type_id=0&category_id=3"}
+                  ]
+                },
+                {
+                  key:"NBA", 
+                  value:[
+                    {id: 0, type_id: 1,name:"球员",path:"/cba?type_id=1&category_id=0"},
+                    {id: 1, type_id: 1,name:"球队",path:"/cba?type_id=1&category_id=1"},
+                    {id: 2, type_id: 1,name:"赛程",path:"/cba?type_id=1&category_id=2"},
+                    {id: 3, type_id: 1,name:"新闻",path:"/cba?type_id=1&category_id=3"}
+                  ]
+                },
+                {key:"更多" , value:[
+                  {id:"more", name: "NBA腾讯体育" , path: "https://sports.qq.com/", children: [] },
+						      {id:"more", name: "虎扑" , path: "https://www.hupu.com/", children: [] },
+						      {id:"more", name: "中国CBA" , path: "https://sports.sohu.com/s/cba", children: [] },
+                  ]
+                },
             ]
         }
     },
     methods: {
+      change(id,type_id){
+        this.$store.dispatch("optionId",id);
+        this.$store.dispatch("typeId",type_id);
+      }
 
     },
     created () {

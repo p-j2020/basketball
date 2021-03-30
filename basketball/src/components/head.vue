@@ -3,6 +3,7 @@
         <div class="left">
         	<img class="logoImg" src="../assets/imgs/index/logo.jpg" alt="logo">
           <p class="user" v-show="userName!=''"> 欢迎您，{{ userName }} </p>
+		  <p style="cursor: pointer;" @click="goToLogoin" v-show="userName!=''">退出</p>
           <p class="logoin" v-show="userName == ''" @click="goToLogoin">登录</p>
         </div>
          <div class="right">
@@ -20,10 +21,11 @@
                               v-for="subitem in item.children" 
                               :key="subitem.name"
                               @click="change(subitem.id,subitem.type_id)">
-                              <router-link 
+                              <router-link v-show="subitem.id != 'more'"
                                 :to="{path: subitem.path} ">
                                 {{subitem.name}} 
                               </router-link> 
+							                <a v-show="subitem.id == 'more'" :href="subitem.path"> {{ subitem.name }} </a>
                             </li>
                         </ul>
                     </li>
@@ -62,7 +64,7 @@ export default {
 					]
 				},
 				{
-					name:"评论",
+					name:"社区",
 					path:"/comment",
 					children:[ ]
 				},
@@ -70,9 +72,9 @@ export default {
 					name:"更 多",
 					path:"###",
 					children:[
-						{ name: "NBA腾讯体育" , path: "###", children: [] },
-						{ name: "虎扑" , path: "###", children: [] },
-						{ name: "中国CBA" , path: "###", children: [] },
+						{id:"more", name: "NBA腾讯体育" , path: "https://sports.qq.com/", children: [] },
+						{id:"more", name: "虎扑" , path: "https://www.hupu.com/", children: [] },
+						{id:"more", name: "中国CBA" , path: "https://sports.sohu.com/s/cba", children: [] },
 					]
 				},
 				{
@@ -91,7 +93,7 @@ export default {
 		},
     	goTo(id){
 			if(this.$route.query.categoryId == id){
-			return;
+			  return;
 			}
 			this.$router.push({
 			path: '/product',
@@ -101,24 +103,23 @@ export default {
 			}
 			})
 		},
-
     	change(id,type_id){
 			this.$store.dispatch("optionId",id);
 			this.$store.dispatch("typeId",type_id);
 		}
-		},
-		created () {
-			// this.userName = this.$route.query.userName;
-      		// this.user_name = sessionStorage.getItem('userName');
-			  if(!JSON.parse(window.sessionStorage.getItem('userName'))){
-					return
-			  }else{
-					const userName = JSON.parse(window.sessionStorage.getItem('userName'));
-			  		this.userName = userName;
-					  // console.log(this.userName);
-			  }
-			  
-		},
+	},
+	created () {
+		// this.userName = this.$route.query.userName;
+		// this.user_name = sessionStorage.getItem('userName');
+			if(!JSON.parse(window.sessionStorage.getItem('userName'))){
+				return
+			}else{
+				const userName = JSON.parse(window.sessionStorage.getItem('userName'));
+				this.userName = userName;
+					// console.log(this.userName);
+			}
+			
+	},
 }
 </script>
 

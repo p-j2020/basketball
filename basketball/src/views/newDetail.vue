@@ -136,7 +136,7 @@ export default {
     margin-top: 80px;
     line-height: 50px;
     color: rgb(63, 61, 61);
-    background: rgb(117, 114, 114);
+    background: #CFD2D2;
     padding: 10px 0 10px 50px;
 
 }
@@ -193,7 +193,7 @@ export default {
     margin: 0 auto;
     display: flex;
     flex-wrap: wrap;
-    border-top: 2px solid black;
+    border-top: 2px solid #CFD2D2;
 
 }
 
@@ -228,23 +228,23 @@ export default {
 }
 .right .teamNewList{
     margin-top: 80px;
-    border-bottom: 2px solid rgb(93, 92, 92);
-    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+    border-bottom: 2px solid #CFD2D2;
+    box-shadow: 0 2px 12px 0 #CFD2D2;
 }
 .teamNewList .bar{
     width: 100%;
     height: 30px;
     font-size: 18px;
     text-align: center;
-    color: rgb(199, 190, 190);
+    /* color: rgb(199, 190, 190); */
     letter-spacing: 1em;
-    background: rgb(93, 92, 92);
+    background: #CFD2D2;
     border-radius: 5px 5px 0px 0px;
 }
 .teamNewList .new-item{
     padding: 5px;
-    border-left: 2px solid rgb(93, 92, 92);
-    border-right: 2px solid rgb(93, 92, 92);
+    border-left: 2px solid #CFD2D2;
+    border-right: 2px solid #CFD2D2;
 }
 .teamNewList .new-item:hover{
     /* color: rgb(110, 110, 204); */
