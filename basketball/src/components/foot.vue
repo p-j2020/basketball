@@ -23,34 +23,11 @@
                                     </dd>
                                 </dl>
                             </li>
-                            <!-- <li> 
-                                <dl>
-                                    <dt>相关链接</dt>
-                                    <dd><a href="###"><img src="../assets/imgs/index/TMALL.svg" alt="天猫旗舰店"> <span>天猫旗舰店</span></a></dd>
-                                    <dd><a href="###"><img src="../assets/imgs/index/JD.svg" alt="京东旗舰店"> <span>京东旗舰店</span></a></dd>
-                                </dl>
-                            </li> -->
                         </ul>
-                    </div>
-                    <div class="right-lists">
-                        <!-- <div class="code">
-                            <img src="../assets/imgs/index/weibo.png" alt="微博">
-                            <img src="../assets/imgs/index/wechat.png" alt="微信">
-                        </div>
-                          <div class="other">
-                            <div class="phone">
-                                <p>服务热线：400-860-8800</p>
-                                <p>027-87305995</p>
-                            </div>
-                            <p class="email">联系邮箱：kefu@niimbot.com</p> 
-                        </div>  -->
                     </div>
                 </div>   
             </div>
         <div class="friend-link"></div>
-        <div class="copyright">
-            <p>123456</p>
-        </div>
     </div>
 </template>
 

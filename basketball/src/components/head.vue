@@ -1,5 +1,5 @@
 <template>
-    <div class="header">
+    <div class="header" >
         <div class="left">
         	<img class="logoImg" src="../assets/imgs/index/logo.jpg" alt="logo">
           <p class="user" v-show="userName!=''"> 欢迎您，{{ userName }} </p>
@@ -142,7 +142,6 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #F6F6F6;
   padding: 0 40px;
   position: fixed;
   left: 0;
@@ -151,9 +150,12 @@ export default {
   width: 100%;
   box-sizing: border-box;
   color: #242424;
+  background-color: rgba(255, 255, 255, 1);
+
   /* border: 1px black solid; */
 }
- /* .header:hover {
+
+/* .header:hover {
   background-color: rgba(255, 255, 255, 1);
 } */
 

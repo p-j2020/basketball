@@ -120,11 +120,11 @@ export default {
     flex: 1;
     padding: 6px;
     font-size: 18px;
-    font-weight: 600;
+    /* font-weight: 600; */
 }
 .name .text{
     font-size: 16px;
-    font-weight: 600;
+    /* font-weight: 600; */
     padding-left: 5px;
 }
 
@@ -143,7 +143,7 @@ export default {
     /* background-color: rgb(10, 9, 9); */
 }
 
-.nba-right .left .score{
+.nba-right .left .scor{
     padding-top: 10px;
 }
 
@@ -158,6 +158,7 @@ export default {
     flex-direction: column;
     justify-content: space-between;
     color: rgb(99, 97, 97);
+    text-align: left;
 }
 .nba-right .right .partition{
     padding-top: 10px;

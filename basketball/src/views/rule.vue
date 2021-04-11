@@ -3,12 +3,19 @@
         <div class="title">
             <h1>篮球规则</h1>
         </div>
-        <div class="tabList" v-for="item in rules" :key="item.id">
+        <el-collapse class="tabList" v-model="activeNames" @change="handleChange" accordion>
+            <el-collapse-item :title="item.name" :name="key" v-for="item in rules" :key="item.id">
+                <div class="text" v-for=" txts in item.text" :key="txts">
+                {{ txts }}
+            </div>
+            </el-collapse-item>
+        </el-collapse>
+        <!-- <div class="tabList" v-for="item in rules" :key="item.id">
             <div class="name">{{ item.name }}</div>
             <div class="text" v-for=" txts in item.text" :key="txts">
                 {{ txts }}
             </div>
-        </div>
+        </div> -->
     </div>
 </template>
 
@@ -82,5 +89,6 @@ export default {
  }
  .tabList .text{
     padding: 20px 0 0 20px;
+    text-indent: 2em;
  }
 </style>

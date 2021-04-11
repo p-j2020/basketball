@@ -14,7 +14,7 @@
                     <div class="add" @click="dialogFormVisible = true">+</div>
                 </div>
             </div>
-            <div class="comment-list">
+            <!-- <div class="comment-list">
                 <div class="comment-list" v-show="commentList == null">
                     <p>暂无数据</p>
                 </div>
@@ -62,6 +62,70 @@
                         </div>
                     </div>
                 </div>
+            </div> -->
+            <div class="comment-list">
+                <div class="comment-list" v-show="commentList == null">
+                    <p>暂无数据</p>
+                </div>
+                <el-collapse v-model="activeName" accordion @change="handleChange">
+                    <el-collapse-item 
+                        :name="item.category_id" 
+                        class="comment-title" 
+                        v-for="item in commentList" 
+                        :key="item.category_id"
+                    >
+                    <template slot="title">
+                        <span style="font-size:18px;">
+                            {{item.comment_title}}
+                        </span>
+                    </template>
+                        <div class="comment-box" >
+                            <p class="comment-time"> {{ item.time }}</p>
+                            <p class="comment-text"> {{ item.comment_text }} </p>
+                            <p class="head" :class="{ active:showList}"
+                            @click="showCommentList(item.category_id)">评论</p>
+                        <div class="allComment" >
+                            <div class="allcomment-list" v-show="showList">
+                                <div v-show="pushedCommentList.length == 0">
+                                    <p>暂无数据</p>
+                                </div>
+                                <div 
+                                    class="comment-item" 
+                                    v-for="(item,index) in pushedCommentList" 
+                                    :key="item.category_id" 
+                                    v-show="index >= (currentPage-1)*10 &&index <= currentPage*10">
+                                    <p class="comment-item-name"> {{ item.user_name }}  <span class="time"> {{ item.date_time }} </span> </p>
+                                    <p class="comment-item-text"> {{ item.comment_text }} </p>
+                                </div>
+                                <el-pagination
+                                    background
+                                    layout="prev, pager, next"
+                                    hide-on-single-page
+                                    :total="pushedCommentList.length"
+                                    @current-change = "current_change">
+                                </el-pagination>
+                                <div class="publish-comment">
+                                    <el-form  left :inline="true">
+                                        <el-form-item label="发表评论">
+                                            <el-input
+                                                type="textarea"
+                                                :autosize="{ minRows: 1, maxRows: 2}"
+                                                v-model="textarea"
+                                                maxlength="200"
+                                                show-word-limit
+                                            ></el-input>
+                                            
+                                        </el-form-item>
+                                        <el-form-item>
+                                            <el-button type="primary" @click="sub_comment(item.category_id)">提交</el-button>
+                                        </el-form-item>
+                                    </el-form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </el-collapse-item>
+                </el-collapse>
             </div>
         </div>
         <el-drawer
@@ -169,12 +233,22 @@ export default {
             myComment:[],
             userId:0,
             pushedCommentList:[],
-            currentPage:1
+            currentPage:1,
+            activeName: '1'
         }
     },
     methods: {
         current_change(currentPage) {
             this.currentPage = currentPage;
+        },
+        handleChange(val) {
+            console.log(val)
+            if(this.comment_id != val){
+                this.getPushComent(val);
+            }
+            this.showList = true;
+            
+            
         },
         sub_comment(id){
             if(this.textarea == ''){
@@ -251,7 +325,7 @@ export default {
         getPushComent(id){
             axios.post('/api/postCommentRouter/seleTableName',{db_name:'basketball',table_name:`comment_${id}`}).then(
                     res =>{
-                        console.log(res.data.data[0]['count(*)'],'seleTable');
+                        // console.log(res.data.data[0]['count(*)'],'seleTable');
                         if(res.data.data[0]['count(*)'] == 0){
                             this.pushedCommentList = []
                             return
@@ -412,20 +486,20 @@ export default {
             // location.reload()  
             this.dialogFormVisible = false;
         },
-        showCommentText(id){
-            if(!this.showText && id != this.comment_id){
-                this.getPushComent(id);
-            }
-            this.showText = !this.showText
-            if(this.showList == false){
-                this.showList = !this.showList
-            }
-            this.comment_id = id;
-            // console.log(id,'id');
-            // console.log(this.showList,'showList');
-            // console.log(this.showText,'showText');
-            // console.log(this.comment_id,'comment_id');
-        },
+        // showCommentText(id){
+        //     if(!this.showText && id != this.comment_id){
+        //         this.getPushComent(id);
+        //     }
+        //     this.showText = !this.showText
+        //     if(this.showList == false){
+        //         this.showList = !this.showList
+        //     }
+        //     this.comment_id = id;
+        //     // console.log(id,'id');
+        //     // console.log(this.showList,'showList');
+        //     // console.log(this.showText,'showText');
+        //     // console.log(this.comment_id,'comment_id');
+        // },
         showCommentList(id){
             this.showList = !this.showList
             this.comment_id = id;
@@ -448,6 +522,7 @@ export default {
         },
         getTime(){
             let d = new Date();
+            console.log(d);
             return d.getFullYear()*10000000000+(d.getMonth()+1)*100000000+d.getDate()*1000000+d.getHours()*10000+d.getMinutes()*100+d.getSeconds()
         },
         resetForm(formName) {
@@ -467,7 +542,13 @@ export default {
 </script>
 
 <style >
+.resizeNone  .el-textarea__inner{ 
+    resize: none;
+}
+
 .comment{
+    width: 100%;
+    min-height: 855px;
     background-image: linear-gradient(to bottom , #f5f7fa, #c3cfe2);
 }
 .el-drawer__body{
@@ -477,7 +558,7 @@ export default {
     /* margin: 100px auto; */
     margin-top: 80px;
     width: 1400px;
-    min-height: 1000px;
+    min-height: 500px;
     display: flex;
     justify-content: space-around;
 }
@@ -559,31 +640,36 @@ export default {
     /* background-color: blueviolet; */
     background: white;
 }
-.comment-item .comment-title{
-    font-size: 20px;
-    cursor: pointer;
-}
 
 .comment-item .comment-box{    
     padding: 20px;
 }
 
 .comment-box .comment-time{
+    font-size: 16px;
 }
 
 .comment-box .comment-text{
     text-indent: 2em;
     line-height: 2em;
+    font-size: 16px;
+    padding: 0px 20px 10px 20px;
 }
 .comment-box .head{
     color: rgb(180, 176, 169);
     cursor: pointer;
     padding: 5px;
+    font-size: 16px;
 }
 .comment-box .allComment{
-}   
+    padding: 0px 10px 0px 10px;
+    font-size: 16px;
+} 
 
 
+.allComment .time{
+    font-size: 14px;
+}
 
 .comment-box .active{
     color: rgb(72, 135, 235);
